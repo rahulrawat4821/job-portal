@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const companySchema = new mongoose.Schema({
     name:{
         type:String,
-        require:true,
+        required:true,
         unique: true
     },
     decription:{
@@ -21,7 +21,7 @@ const companySchema = new mongoose.Schema({
     userId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
-        require:true
+        required:true
     },
 },{timestamps:true})
 

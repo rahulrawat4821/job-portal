@@ -1,5 +1,5 @@
 import { User } from "../models/user.model.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
 // import getDatauri from "../utils/datauri.js";
 // import cloudinary from "../utils/cloudinary.js";
@@ -153,10 +153,10 @@ export const updateProfile = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, bio, skills } = req.body;
         const file = req.file;
-        if (!fullname || !email || !phoneNumber || !bio || !skills) {
-            return res.status(400).json({ message: "Please provide all fields", success: false });
+        let skillsArray;
+        if(skills){
+               skillsArray = skills.split(",").map(s => s.trim());
         }
-        const skillsArray = skills.split(",").map(s => s.trim());
         const userId = req.id;
         let user = await User.findById(userId);
 
@@ -168,11 +168,11 @@ export const updateProfile = async (req, res) => {
         }
 
         // updating data 
-        user.fullname = fullname,
-            user.email = email,
-            user.phoneNumber = phoneNumber,
-            user.profile.bio = bio,
-            user.profile.skills = skillsArray
+            if(fullname) user.fullname = fullname;
+            if(email) user.email = email;
+            if(phoneNumber) user.phoneNumber = phoneNumber;
+            if(bio) user.profile.bio = bio;
+            if(skills) user.profile.skills = skillsArray;
 
         // resume come here later here...
 
@@ -190,7 +190,7 @@ export const updateProfile = async (req, res) => {
         return res.status(200).json({
             message: "Profile updated succesfully",
             user,
-            succes: true
+            success: true
         })
     } catch (error) {
         console.log(error);
