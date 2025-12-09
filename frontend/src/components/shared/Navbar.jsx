@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { CiUser } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 
 
@@ -35,52 +36,60 @@ const Navbar = () => {
             <li>Jobs</li>
             <li>Browse</li>
           </ul>
-          { !user ? (
+          {!user ? (
             <div className="flex items-center gap-2 font-medium">
+              <Link to="/login">
                 <button className="cursor-pointer">Login</button>
-                <button className="bg-[#6A38C2] hover:bg-[#5f2db4] cursor-pointer text-white p-2 rounded-xl">SignUp</button>
-            </div>
-          ):(
-             // Avatar Button (COMMENT OUTSIDE JSX)
-          <div ref={menuRef} className="relative">
-            <img
-              onClick={() => setOpen(!open)}
-              src="https://i.pravatar.cc/50"
-              alt="avatar"
-              className="w-10 h-10 rounded-full cursor-pointer border"
-            />
+              </Link>
 
-            {/* Popover */}
-            {open && (
-              <div className="absolute right-0 mt-3 w-64 bg-white shadow-xl rounded-xl p-4 z-50">
-                
-                {/* Top section */}
-                <div className="flex gap-3 items-center border-b pb-3">
-                  <img
-                    src="https://i.pravatar.cc/50"
-                    className="w-12 h-12 rounded-full"
-                  />
-                  <div>
-                    <h3 className="font-semibold text-lg">Rahul Rawat</h3>
-                    <p className="text-sm text-gray-500">rahul@gmail.com</p>
+              <Link to="/signup">
+                <button className="bg-[#6A38C2] hover:bg-[#5f2db4] text-white p-2 rounded-xl cursor-pointer">
+                  SignUp
+                </button>
+              </Link>
+
+            </div>
+          ) : (
+            // Avatar Button (COMMENT OUTSIDE JSX)
+            <div ref={menuRef} className="relative">
+              <img
+                onClick={() => setOpen(!open)}
+                src="https://i.pravatar.cc/50"
+                alt="avatar"
+                className="w-10 h-10 rounded-full cursor-pointer border"
+              />
+
+              {/* Popover */}
+              {open && (
+                <div className="absolute right-0 mt-3 w-64 bg-white shadow-xl rounded-xl p-4 z-50">
+
+                  {/* Top section */}
+                  <div className="flex gap-3 items-center border-b pb-3">
+                    <img
+                      src="https://i.pravatar.cc/50"
+                      className="w-12 h-12 rounded-full"
+                    />
+                    <div>
+                      <h3 className="font-semibold text-lg">Rahul Rawat</h3>
+                      <p className="text-sm text-gray-500">rahul@gmail.com</p>
+                    </div>
+                  </div>
+
+                  {/* Options */}
+                  <div className="pt-3">
+                    <button className="flex items-center gap-3 w-full py-2 text-gray-700 hover:bg-gray-100 rounded-lg px-2">
+                      <CiUser className="text-gray-700 text-xl " /> View Profile
+                    </button>
+
+                    <button className="flex items-center gap-3 w-full py-2 hover:bg-gray-100 rounded-lg px-2 text-red-500">
+                      < IoIosLogOut className="text-gray-700 text-xl" /> Logout
+                    </button>
                   </div>
                 </div>
-
-                {/* Options */}
-                <div className="pt-3">
-                  <button className="flex items-center gap-3 w-full py-2 text-gray-700 hover:bg-gray-100 rounded-lg px-2">
-                    <CiUser className="text-gray-700 text-xl " /> View Profile
-                  </button>
-
-                  <button className="flex items-center gap-3 w-full py-2 hover:bg-gray-100 rounded-lg px-2 text-red-500">
-                    < IoIosLogOut className="text-gray-700 text-xl"/ > Logout
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
           )}
-         
+
         </div>
       </div>
     </div>

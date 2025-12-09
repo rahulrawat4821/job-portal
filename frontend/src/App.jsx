@@ -1,31 +1,23 @@
-import React from 'react'
-import Navbar from './components/shared/Navbar'
-import BrowseRouter from { createBrowserRouter } from 'react-router-dom'
-import Login from './components/shared/auth/Login'
-import SignUp from './components/shared/auth/SignUp'
+import { Routes, Route } from "react-router-dom";
+import Login from "./components/shared/auth/Login";
+import Signup from "./components/shared/auth/SignUp";
+import Home from "./components/Home";
+import Layout from "./components/Layout";
 
-
-const appRouter = createBrowserRouter([
-  {
-    path:'/',
-    element:<Home/>
-  },
-  {
-    path:'/login',
-    element:<Login/>
-  },
-  {
-    path:'/signup',
-    element:<SignUp/>
-  }
-])
-
-const App = () => {
+export default function App() {
   return (
-    <div>
-      <Navbar/>
-    </div>
-  )
-}
+    <Routes>
 
-export default App
+      {/* Auth Routes */}
+     
+
+      {/* Main App Routes (Navbar visible) */}
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+         <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      </Route>
+
+    </Routes>
+  );
+}
