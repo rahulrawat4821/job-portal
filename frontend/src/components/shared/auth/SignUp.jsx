@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { USER_API_END_POINT } from "../../../utils/context";
+import { toast } from 'sonner';
+import axios from "axios";
 
 const SignUp = () => {
   const [input, setInput] = useState({
     fullname: "",
     email: "",
-    PhoneNumber: "",
+    phoneNumber: "",
     password: "",
     role: "",
     file: ""
   });
+
+  const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -20,8 +25,34 @@ const SignUp = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(input);
-  }
+
+    const formData = new FormData();
+
+    formData.append("fullname", input.fullname); 
+    formData.append("email", input.email); 
+    formData.append("phoneNumber", input.phoneNumber); 
+    formData.append("password", input.password);
+     formData.append("role", input.role); 
+     if (input.file) { 
+      formData.append("file", input.file); }
+
+    try {
+      const res = await axios.post(
+        `${USER_API_END_POINT}/register`,
+        formData,
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        navigate("/login")
+        toast.success("Registration Successful!");
+
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response.data.message);
+    }
+  };
+
 
   return (
     <div className="w-full flex justify-center mt-10 px-4">
@@ -48,7 +79,7 @@ const SignUp = () => {
           <input
             type="email"
             value={input.email}
-              name="email" 
+            name="email"
             onChange={changeEventHandler}
             placeholder="Enter your email.."
             className="w-full border border-gray-400 p-3 rounded-lg"
@@ -60,10 +91,10 @@ const SignUp = () => {
           <label className="block font-medium mb-1">Phone Number</label>
           <input
             type="text"
-              name="PhoneNumber"
-            value={input.PhoneNumber}
+            name="phoneNumber"
+            value={input.phoneNumber}
             onChange={changeEventHandler}
-            placeholder="Enter your PhoneNumber.."
+            placeholder="Enter your phoneNumber.."
             className="w-full border border-gray-400 p-3 rounded-lg"
           />
         </div>
@@ -74,7 +105,7 @@ const SignUp = () => {
           <input
             type="password"
             value={input.password}
-              name="password"      
+            name="password"
             onChange={changeEventHandler}
             placeholder="Enter password.."
             className="w-full border border-gray-400 p-3 rounded-lg"

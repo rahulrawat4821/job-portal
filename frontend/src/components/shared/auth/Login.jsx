@@ -1,25 +1,47 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "sonner";
+import { USER_API_END_POINT } from "../../../utils/context";
 
-const SignUp = () => {
-   const [input, setInput] = useState({
-     email:"",
-     password:"",
-     role:"",
-    });
- 
-    const changeEventHandler = (e) => {
+const Login = () => {
+  const navigate = useNavigate();
+
+  const [input, setInput] = useState({
+    email: "",
+    password: "",
+    role: "",
+  });
+
+  const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
-  }
+  };
 
-       const submitHandler = async(e) => {
-       e.preventDefault();
-       console.log(input);
-   }
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        `${USER_API_END_POINT}/login`,
+        input,
+        { withCredentials: true }
+      );
+
+      if (res.data.success) {
+        toast.success("Login Successful!");
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response.data.message);
+    }
+  };
 
   return (
     <div className="w-full flex justify-center mt-10 px-4">
-      <form onSubmit={submitHandler} className="w-full max-w-3xl p-8 border border-gray-400 rounded-xl shadow-sm">
+      <form
+        onSubmit={submitHandler}
+        className="w-full max-w-3xl p-8 border border-gray-400 rounded-xl shadow-sm"
+      >
         <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
 
         {/* Email */}
@@ -90,4 +112,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;
