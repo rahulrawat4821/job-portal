@@ -3,9 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { USER_API_END_POINT } from "../../../utils/context";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../../../redux/authSlice";
 
 const Login = () => {
+  const {loading} = useSelector(store=> store.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [input, setInput] = useState({
     email: "",
@@ -20,6 +24,7 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      dispatch(setLoading(true));
       const res = await axios.post(
         `${USER_API_END_POINT}/login`,
         input,
@@ -33,6 +38,8 @@ const Login = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.response.data.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -94,12 +101,13 @@ const Login = () => {
             Recruiter
           </label>
         </div>
-
-        {/* Submit Button */}
-        <button className="w-full bg-[#0F172A] text-white p-3 rounded-lg text-lg font-medium cursor-pointer mb-4">
+        { loading ?   <button className="w-full bg-[#0F172A] text-white p-3 rounded-lg text-lg font-medium cursor-none mb-4">
+          Please wait...
+        </button> :
+          <button className="w-full bg-[#0F172A] text-white p-3 rounded-lg text-lg font-medium cursor-pointer mb-4">
           Login
         </button>
-
+        }
         {/* Sign Up Redirect */}
         <p className="text-sm text-gray-600 text-center">
           Don't have an account?{" "}
