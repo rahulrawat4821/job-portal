@@ -1,1 +1,12 @@
 @import "tailwindcss";
+/* Left Arrow */
+.slick-prev:before {
+  color: #6A38C2 !important;   /* purple */
+  font-size: 30px;
+}
+
+/* Right Arrow */
+.slick-next:before {
+  color: #6A38C2 !important;   /* purple */
+  font-size: 30px;
+}
