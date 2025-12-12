@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { USER_API_END_POINT } from "../../../utils/context";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "../../../redux/authSlice";
+import { setLoading, setUser } from "../../../redux/authSlice";
 
 const Login = () => {
   const {loading} = useSelector(store=> store.auth);
@@ -32,6 +32,7 @@ const Login = () => {
       );
 
       if (res.data.success) {
+        dispatch(setUser(res.data.user));
         toast.success("Login Successful!");
         navigate("/");
       }

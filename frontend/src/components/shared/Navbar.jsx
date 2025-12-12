@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { CiUser } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 
@@ -8,7 +9,7 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef();
-  const user = false;
+  const {user} = useSelector(store => store.auth);
 
   // Close popover when clicking outside
   useEffect(() => {
@@ -32,9 +33,9 @@ const Navbar = () => {
         {/* Nav Items */}
         <div className="flex items-center gap-6 relative">
           <ul className="flex items-center font-medium gap-5">
-            <li>Home</li>
-            <li>Jobs</li>
-            <li>Browse</li>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/jobs">Jobs</Link></li>
+            <li><Link to="/browse">Browse</Link></li>
           </ul>
           {!user ? (
             <div className="flex items-center gap-2 font-medium">
