@@ -1,7 +1,10 @@
 import React from "react";
 import { FaRegBookmark } from "react-icons/fa6";
+import { useNavigate } from "react-router";
 
 const Job = () => {
+  const navigate = useNavigate();
+  const jobId = "rextcyvguhbj";
   return (
     <div className="
       bg-white shadow-md border rounded-xl 
@@ -55,7 +58,7 @@ const Job = () => {
 
       {/* Buttons */}
       <div className="flex items-center gap-3 mt-5">
-        <button className="border px-4 sm:px-5 py-1.5 text-sm rounded-lg hover:bg-gray-100 transition font-medium">
+        <button className="border px-4 sm:px-5 py-1.5 text-sm rounded-lg hover:bg-gray-100 transition font-medium" onClick={() => navigate(`/description/${jobId}`)}>
           Details
         </button>
 

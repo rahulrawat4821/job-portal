@@ -5,6 +5,8 @@ import Home from "./components/Home";
 import Layout from "./components/Layout";
 import Jobs from "./components/Jobs";
 import Browse from "./components/Browse";
+import Profile from "./components/Profile";
+import JobDescription from "./components/JobDescription";
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/browse" element={<Browse />} />
+        <Route path="/profile" element={<Profile/>} />
+        <Route path="/description/:id" element={<JobDescription/>} />
       </Route>
 
     </Routes>

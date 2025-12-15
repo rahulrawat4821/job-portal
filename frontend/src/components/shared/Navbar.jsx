@@ -78,8 +78,8 @@ const Navbar = () => {
 
                   {/* Options */}
                   <div className="pt-3">
-                    <button className="flex items-center gap-3 w-full py-2 text-gray-700 hover:bg-gray-100 rounded-lg px-2">
-                      <CiUser className="text-gray-700 text-xl " /> View Profile
+                    <button className="flex items-center gap-3 w-full py-2 text-gray-700 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">
+                      <CiUser className="text-gray-700 text-xl " /> <Link to="/profile">View Profile</Link>
                     </button>
 
                     <button className="flex items-center gap-3 w-full py-2 hover:bg-gray-100 rounded-lg px-2 text-red-500">
