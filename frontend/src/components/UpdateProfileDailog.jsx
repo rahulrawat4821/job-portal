@@ -1,43 +1,61 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/authSlice";
+import { USER_API_END_POINT } from "../utils/context";
+import { toast } from "sonner";
 
 const UpdateProfileDialog = ({ open, setOpen, user }) => {
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
-    name: user.name || "",
-    email: user.email || "",
-    phone: user.phone || "",
-    bio: user.bio || "",
-    skills: user.skills?.join(",") || "",
-    resume: null,
+    fullname: user.fullname || "",
+    phoneNumber: user.phoneNumber || "",
+    bio: user.profile?.bio || "",
+    skills: user.profile?.skills?.join(",") || "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const changeHandler = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  const fileHandler = (e) => {
-    setFormData({ ...formData, resume: e.target.files[0] });
-  };
-
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const updatedUser = {
-      ...user,
-      name: formData.name,
-      bio: formData.bio,
-      phone: formData.phone,
-      skills: formData.skills.split(","),
-      resume: formData.resume
-        ? formData.resume.name // frontend demo
-        : user.resume,
-    };
+    try {
+      const data = new FormData();
+      data.append("fullname", formData.fullname);
+      data.append("phoneNumber", formData.phoneNumber);
+      data.append("bio", formData.bio);
+      data.append("skills", formData.skills);
+      data.append("resume", formData.resume);
 
-    dispatch(setUser(updatedUser));
-    setOpen(false);
+      const res = await axios.put(
+        `${USER_API_END_POINT}/profile/update`,
+        data,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.success) {
+        dispatch(setUser(res.data.user));
+        setOpen(false);
+        toast.success(res.data.message || "Profile updated successfully!");
+
+      }
+    } catch (error) {
+      console.log("Profile update error:", error);
+      toast.error("Failed to update profile!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!open) return null;
@@ -45,6 +63,8 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white w-full max-w-lg rounded-xl p-6 relative">
+
+        {/* Close Button */}
         <button
           onClick={() => setOpen(false)}
           className="absolute right-4 top-4 text-xl"
@@ -55,30 +75,35 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
         <h2 className="text-xl font-semibold mb-5">Update Profile</h2>
 
         <form onSubmit={submitHandler} className="space-y-4">
-          {/* Name */}
+
+          {/* Full Name */}
           <input
-            name="name"
-            value={formData.name}
+            type="text"
+            name="fullname"
+            value={formData.fullname}
             onChange={changeHandler}
-            placeholder="Name"
+            placeholder="Full Name"
             className="w-full border p-3 rounded-lg"
+            required
           />
 
-          {/* Email */}
+          {/* Email (Readonly) */}
           <input
-            name="email"
-            value={formData.email}
+            type="email"
+            value={user.email}
             disabled
             className="w-full border p-3 rounded-lg bg-gray-100"
           />
 
-          {/* Phone */}
+          {/* Phone Number */}
           <input
-            name="phone"
-            value={formData.phone}
+            type="number"
+            name="phoneNumber"
+            value={formData.phoneNumber}
             onChange={changeHandler}
-            placeholder="Phone"
+            placeholder="Phone Number"
             className="w-full border p-3 rounded-lg"
+            required
           />
 
           {/* Bio */}
@@ -88,49 +113,37 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
             onChange={changeHandler}
             placeholder="Bio"
             className="w-full border p-3 rounded-lg"
+            rows={3}
           />
 
           {/* Skills */}
           <input
+            type="text"
             name="skills"
             value={formData.skills}
             onChange={changeHandler}
             placeholder="Skills (comma separated)"
             className="w-full border p-3 rounded-lg"
           />
-
-          {/* Resume Upload */}
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Resume (PDF only)
-            </label>
-
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={fileHandler}
-              className="w-full border p-2 rounded-lg"
-            />
-
-            {formData.resume && (
-              <p className="text-sm text-green-600 mt-1">
-                Selected: {formData.resume.name}
-              </p>
-            )}
-
-            {!formData.resume && user.resume && (
-              <p className="text-sm text-gray-500 mt-1">
-                Current: {user.resume}
-              </p>
-            )}
-          </div>
+           
+           {/* //resume */}
+          <input
+    type="file"
+    name="resume"
+    accept=".pdf"
+    onChange={(e) =>
+      setFormData((prev) => ({ ...prev, resume: e.target.files[0] }))
+    }
+    className="w-full border p-2 rounded-lg"
+  />
 
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-slate-900 to-slate-700 text-white py-3 rounded-lg font-semibold"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-slate-900 to-slate-700 text-white py-3 rounded-lg font-semibold disabled:opacity-60"
           >
-            Update
+            {loading ? "Updating..." : "Update Profile"}
           </button>
         </form>
       </div>

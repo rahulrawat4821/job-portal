@@ -1,6 +1,8 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
+import getDataUri from "../utils/datauri.js";
+import cloudinary from "../utils/cloudinary.js";
 // import getDatauri from "../utils/datauri.js";
 // import cloudinary from "../utils/cloudinary.js";
 
@@ -150,49 +152,69 @@ export const logout = async (req, res) => {
 
 // update profile
 export const updateProfile = async (req, res) => {
-    try {
-        const { fullname, email, phoneNumber, bio, skills } = req.body;
-        const file = req.file;
-        let skillsArray;
-        if(skills){
-               skillsArray = skills.split(",").map(s => s.trim());
-        }
-        const userId = req.id;
-        let user = await User.findById(userId);
+  try {
+    const { fullname, email, phoneNumber, bio, skills } = req.body;
+    const file = req.file;
 
-        if (!user) {
-            return res.status(400).json({
-                message: "User not found.",
-                succes: false
-            })
-        }
-
-        // updating data 
-            if(fullname) user.fullname = fullname;
-            if(email) user.email = email;
-            if(phoneNumber) user.phoneNumber = phoneNumber;
-            if(bio) user.profile.bio = bio;
-            if(skills) user.profile.skills = skillsArray;
-
-        // resume come here later here...
-
-        await user.save();
-
-        user = {
-            _id: user._id,
-            fullname: user.fullname,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            role: user.role,
-            profile: user.profile
-        }
-
-        return res.status(200).json({
-            message: "Profile updated succesfully",
-            user,
-            success: true
-        })
-    } catch (error) {
-        console.log(error);
+    let skillsArray;
+    if (skills) {
+      skillsArray = skills.split(",").map((s) => s.trim());
     }
-}
+
+    const userId = req.id;
+    let user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+        success: false,
+      });
+    }
+
+    // Update basic fields
+    if (fullname) user.fullname = fullname;
+    if (email) user.email = email;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+    if (bio) user.profile.bio = bio;
+    if (skills) user.profile.skills = skillsArray;
+
+    // Upload resume to Cloudinary (if file is provided)
+    if (file) {
+      const fileUri = getDataUri(file);
+      const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
+        resource_type: "raw", // Needed for PDF/docx/etc.
+      });
+
+      if (cloudResponse) {
+        user.profile.resume = cloudResponse.secure_url; // Make it downloadable/viewable
+        user.profile.resumeOriginalName = file.originalname; // Save original file name
+      }
+    }
+
+    await user.save();
+
+    // Prepare response
+    const responseUser = {
+      _id: user._id,
+      fullname: user.fullname,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+      profile: user.profile,
+      resume: user.profile.resume,
+    };
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user: responseUser,
+      success: true,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+      error: error.message,
+    });
+  }
+};
