@@ -1,8 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { CiUser } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import {toast} from 'sonner';
+import axios from "axios";
+import { USER_API_END_POINT } from "../../utils/context";
+import { setUser } from "../../redux/authSlice";
+
+
 
 
 
@@ -10,6 +16,23 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef();
   const {user} = useSelector(store => store.auth);
+  const dispatch = useDispatch();
+  const navigate  = useNavigate();
+
+  //logout
+  const logoutHandler = async () => {
+    try {
+        const res = await axios.get(`${USER_API_END_POINT}/logout`, {withCredentials:true});
+        if(res.data.success){
+          dispatch(setUser(null));
+          navigate("/");
+          toast.success(res.data.message);
+        }
+    } catch (error) {
+        console.log(error);
+        toast.error(error.data.message);
+    }
+  }
 
   // Close popover when clicking outside
   useEffect(() => {
@@ -55,7 +78,7 @@ const Navbar = () => {
             <div ref={menuRef} className="relative">
               <img
                 onClick={() => setOpen(!open)}
-                src="https://i.pravatar.cc/50"
+                src={user?.profile.profilePhoto}
                 alt="avatar"
                 className="w-10 h-10 rounded-full cursor-pointer border"
               />
@@ -67,7 +90,7 @@ const Navbar = () => {
                   {/* Top section */}
                   <div className="flex gap-3 items-center border-b pb-3">
                     <img
-                      src="https://i.pravatar.cc/50"
+                      src={user?.profile.profilePhoto}
                       className="w-12 h-12 rounded-full"
                     />
                     <div>
@@ -82,7 +105,7 @@ const Navbar = () => {
                       <CiUser className="text-gray-700 text-xl " /> <Link to="/profile">View Profile</Link>
                     </button>
 
-                    <button className="flex items-center gap-3 w-full py-2 hover:bg-gray-100 rounded-lg px-2 text-red-500">
+                    <button onClick={logoutHandler} className="flex items-center gap-3 w-full py-2 hover:bg-gray-100 rounded-lg px-2 text-red-500 cursor-pointer">
                       < IoIosLogOut className="text-gray-700 text-xl" /> Logout
                     </button>
                   </div>

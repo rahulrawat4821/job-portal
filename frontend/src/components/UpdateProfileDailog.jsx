@@ -125,17 +125,17 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
             placeholder="Skills (comma separated)"
             className="w-full border p-3 rounded-lg"
           />
-           
-           {/* //resume */}
+
+          {/* //resume */}
           <input
-    type="file"
-    name="resume"
-    accept=".pdf"
-    onChange={(e) =>
-      setFormData((prev) => ({ ...prev, resume: e.target.files[0] }))
-    }
-    className="w-full border p-2 rounded-lg"
-  />
+            type="file"
+            name="resume"
+            accept=".pdf"
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, resume: e.target.files[0] }))
+            }
+            className="w-full border p-2 rounded-lg"
+          />
 
           {/* Submit */}
           <button

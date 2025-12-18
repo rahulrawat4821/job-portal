@@ -71,18 +71,18 @@ const Profile = () => {
       {/* Resume Section */}
       <div className="mt-6">
         <h3 className="font-semibold mb-1">Resume</h3>
-         {user.profile?.resume ? (
-    <a
-      href={user.profile.resume}
-      className="text-blue-600 underline"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {user.profile.resumeOriginalName || "View Resume"}
-    </a>
-  ) : (
-    <span className="text-gray-500">NA</span>
-  )}
+        {user.profile?.resume ? (
+          <a
+            href={user.profile.resume}
+            className="text-blue-600 underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {user.profile.resumeOriginalName || "View Resume"}
+          </a>
+        ) : (
+          <span className="text-gray-500">NA</span>
+        )}
       </div>
 
       {/* Applied Jobs Table */}
