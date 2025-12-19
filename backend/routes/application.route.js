@@ -4,7 +4,7 @@ import { applyJob, getApplicant, getAppliedJob, updateStatus } from "../controll
 
 const router = express.Router();
 
-router.get("/apply/:id",isAuthenticated, applyJob);
+router.post("/apply/:id",isAuthenticated, applyJob);
 router.get("/get",isAuthenticated,getAppliedJob);
 router.get("/:id/applicants",isAuthenticated,getApplicant);
 router.post("/status/:id/update",isAuthenticated,updateStatus)
