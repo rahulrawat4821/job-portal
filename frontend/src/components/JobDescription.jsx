@@ -59,10 +59,11 @@ const JobDescription = () => {
           dispatch(setSingleJob(res.data.job));
 
           const applied = res.data.job.applications?.some(
-            app => app.applicant === user?._id
+            app => app.applicant?._id === user?._id
           );
 
           setIsApplied(applied);
+
         }
       } catch (error) {
         console.log("Job fetch error:", error);
@@ -96,11 +97,10 @@ const JobDescription = () => {
         <button
           onClick={applyForJob}
           disabled={isApplied}
-          className={`px-6 py-2 rounded-lg font-semibold text-white ${
-            isApplied
+          className={`px-6 py-2 rounded-lg font-semibold text-white ${isApplied
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-gradient-to-r from-purple-500 to-indigo-500 hover:opacity-90"
-          }`}
+            }`}
         >
           {isApplied ? "Already Applied" : "Apply Now"}
         </button>

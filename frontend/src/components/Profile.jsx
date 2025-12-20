@@ -56,7 +56,7 @@ const Profile = () => {
           {user.profile?.skills?.length ? (
             user.profile.skills.map((skill, i) => (
               <span
-                key={i}
+                key={skill}
                 className="bg-slate-900 text-white px-4 py-1 rounded-full text-sm"
               >
                 {skill}
