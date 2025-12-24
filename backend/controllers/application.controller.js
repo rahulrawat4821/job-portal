@@ -39,24 +39,27 @@ export const applyJob = async (req, res) => {
 // Get jobs applied by user
 export const getAppliedJob = async (req, res) => {
   try {
-    const userId = req.id;
-    const applications = await Application.find({ applicant: userId })
-      .sort({ createdAt: -1 })
+    const userId = req.user._id;
+
+    const applications = await Application.find({
+      applicant: userId,
+    })
       .populate({
         path: "job",
-        populate: { path: "company" }
-      });
+        populate: {
+          path: "company",
+        },
+      })
+      .sort({ createdAt: -1 });
 
-    if (!applications || applications.length === 0) {
-      return res.status(404).json({ message: "No applications found.", success: false });
-    }
-
-    return res.status(200).json({ applications, success: true });
+    res.status(200).json(applications);
   } catch (error) {
-    console.error("Get Applied Jobs Error:", error);
-    return res.status(500).json({ message: "Server Error", success: false });
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch applied jobs" });
   }
 };
+
+
 
 // Get all applicants for a job (for admin/recruiter)
 export const getApplicant = async (req, res) => {
@@ -66,8 +69,12 @@ export const getApplicant = async (req, res) => {
       .populate({
         path: "applications",
         options: { sort: { createdAt: -1 } },
-        populate: { path: "applicant", select: "_id name email" }
+        populate: {
+          path: "applicant",
+          select: "_id fullname email phoneNumber profile" // include fullname and profile
+        }
       });
+
 
     if (!job) {
       return res.status(404).json({ message: "Job not found.", success: false });

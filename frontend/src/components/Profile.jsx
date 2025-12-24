@@ -5,8 +5,10 @@ import { FiEdit } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import AppliedJobTable from "./AppliedJobTable";
 import UpdateProfileDialog from "./UpdateProfileDailog";
+import useGetAppliedJob from "../Hooks/useGetAppliedJob";
 
 const Profile = () => {
+  useGetAppliedJob();
   const { user } = useSelector((store) => store.auth);
   const [open, setOpen] = useState(false);
 

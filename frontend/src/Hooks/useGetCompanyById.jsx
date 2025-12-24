@@ -8,6 +8,8 @@ const useGetCompanyById = (companyId) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!companyId) return; // ✅ VERY IMPORTANT
+
     const fetchSingleCompany = async () => {
       try {
         const res = await axios.get(
@@ -15,7 +17,6 @@ const useGetCompanyById = (companyId) => {
           { withCredentials: true }
         );
 
-        // ✅ FIXED HERE
         if (res.data.success) {
           dispatch(setSingleCompany(res.data.company));
         }

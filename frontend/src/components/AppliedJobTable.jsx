@@ -1,25 +1,12 @@
 import React from "react";
-
-const appliedJobs = [
-  {
-    date: "17-07-2024",
-    role: "Frontend Developer",
-    company: "Google",
-    status: "Selected",
-  },
-  {
-    date: "17-07-2024",
-    role: "Frontend Developer",
-    company: "Google",
-    status: "Selected",
-  },
-];
+import { useSelector } from "react-redux";
 
 function AppliedJobTable() {
+  const { allAppliedJobs } = useSelector((store) => store.job);
+
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full border-collapse">
-        {/* Table Head */}
         <thead>
           <tr className="text-left text-gray-500 border-b">
             <th className="py-3 px-4 font-medium">Date</th>
@@ -29,23 +16,33 @@ function AppliedJobTable() {
           </tr>
         </thead>
 
-        {/* Table Body */}
         <tbody>
-          {appliedJobs.map((job, index) => (
-            <tr
-              key={index}
-              className="border-b border-gray-400 last:border-b-0 hover:bg-gray-50 transition"
-            >
-              <td className="py-4 px-4">{job.date}</td>
-              <td className="py-4 px-4">{job.role}</td>
-              <td className="py-4 px-4">{job.company}</td>
-              <td className="py-4 px-4 text-right">
-                <span className="inline-block bg-slate-900 text-white text-sm px-4 py-1 rounded-full">
-                  {job.status}
-                </span>
+          {allAppliedJobs.length === 0 ? (
+            <tr>
+              <td colSpan="4" className="text-center py-4 text-gray-500">
+                You haven't applied to any jobs yet
               </td>
             </tr>
-          ))}
+          ) : (
+            allAppliedJobs.map((appliedJob) => (
+              <tr key={appliedJob._id} className="border-b hover:bg-gray-50">
+                <td className="py-4 px-4">
+                  {appliedJob.createdAt?.split("T")[0]}
+                </td>
+                <td className="py-4 px-4">
+                  {appliedJob.job?.title}
+                </td>
+                <td className="py-4 px-4">
+                  {appliedJob.job?.company?.name}
+                </td>
+                <td className="py-4 px-4 text-right">
+                  <span className="bg-slate-900 text-white px-4 py-1 rounded-full text-sm">
+                    {appliedJob.status}
+                  </span>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

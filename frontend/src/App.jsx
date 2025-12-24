@@ -10,7 +10,9 @@ import JobDescription from "./components/JobDescription";
 import Companies from "./components/admin/Companies";
 import CompanyCreate from "./components/admin/CompanyCreate";
 import CompanySetup from "./components/admin/CompanySetup";
-
+import AdminJobs from "./components/admin/AdminJobs"
+import AdminJobsCreate from "./components/admin/AdminJobsCreate";
+import AdminJobApplicants from "./components/admin/AdminJobApplicants";
 export default function App() {
   return (
     <Routes>
@@ -34,8 +36,11 @@ export default function App() {
         <Route path="/admin/companies" element={<Companies />} />
         <Route path="/admin/companies/create" element={<CompanyCreate />} />
         <Route path="/admin/companies/:id" element={<CompanySetup/>} />
-      </Route>
+        <Route path="/admin/jobs" element={<AdminJobs/>} />
+        <Route path="/admin/jobs/create" element={<AdminJobsCreate />} />
+        <Route path="/admin/jobs/:jobId/applicants" element={<AdminJobApplicants/>} />
 
+      </Route>
     </Routes>
   );
 }

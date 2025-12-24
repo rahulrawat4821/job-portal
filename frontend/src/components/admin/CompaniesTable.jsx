@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useGetAllCompanies from "../../Hooks/useGetAllCompanies";
+import { useNavigate } from "react-router";
 
 const CompaniesTable = () => {
   useGetAllCompanies(); // fetch companies on mount
-  const { companies } = useSelector((store) => store.company);
+  const navigate = useNavigate();
+
+  const { companies, serachCompanyText } = useSelector(
+    (store) => store.company
+  );
+
+  const [filterCompany, setFilterCompany] = useState([]);
+
+  useEffect(() => {
+    if (!companies) return;
+
+    const filteredCompany = companies.filter((company) => {
+      if (!serachCompanyText || serachCompanyText.trim() === "") {
+        return true;
+      }
+
+      return company?.name
+        ?.toLowerCase()
+        .includes(serachCompanyText.toLowerCase());
+    });
+
+    setFilterCompany(filteredCompany);
+  }, [companies, serachCompanyText]);
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-4">
-      {companies && companies.length > 0 ? (
+      {filterCompany.length > 0 ? (
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b text-gray-500 text-sm">
@@ -18,8 +41,9 @@ const CompaniesTable = () => {
               <th className="text-right py-4 px-4">Action</th>
             </tr>
           </thead>
+
           <tbody>
-            {companies.map((company) => (
+            {filterCompany.map((company) => (
               <tr key={company._id} className="border-b hover:bg-gray-50">
                 <td className="py-4 px-4">
                   <img
@@ -31,13 +55,16 @@ const CompaniesTable = () => {
                     className="w-8 h-8 rounded-full"
                   />
                 </td>
+
                 <td className="py-4 px-4 font-medium text-gray-800">
                   {company.name}
                 </td>
+
                 <td className="py-4 px-4 text-gray-600">
                   {new Date(company.createdAt).toLocaleDateString()}
                 </td>
-                <td className="py-4 px-4 text-right">
+
+                <td onClick={() => navigate(`/admin/companies/${company._id}`)} className="py-4 px-4 text-right">
                   <button className="text-xl font-bold">•••</button>
                 </td>
               </tr>

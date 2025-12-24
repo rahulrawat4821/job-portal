@@ -4,11 +4,15 @@ import axios from "axios";
 import { COMPANY_API_END_POINT } from "../../utils/context";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
+import useGetCompanyById from "../../Hooks/useGetCompanyById";
 
 const CompanySetup = () => {
+  
   const { id } = useParams();
   const navigate = useNavigate();
   const { singleCompany } = useSelector((store) => store.company);
+
+  useGetCompanyById(id);
 
   const [formData, setFormData] = useState({
     name: "",
