@@ -103,9 +103,9 @@ const AdminJobApplicants = () => {
                   <td className="py-3 px-4 border-b">{applicant.email || "N/A"}</td>
                   <td className="py-3 px-4 border-b">{applicant.phoneNumber || "N/A"}</td>
                   <td className="py-3 px-4 border-b">
-                    {app.resume ? (
+                    {applicant.profile?.resume ? (
                       <a
-                        href={app.resume}
+                        href={applicant.profile.resume}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline"
@@ -114,6 +114,7 @@ const AdminJobApplicants = () => {
                       </a>
                     ) : "N/A"}
                   </td>
+
                   <td className="py-3 px-4 border-b">{new Date(app.createdAt).toLocaleDateString()}</td>
                   <td className="py-3 px-4 border-b relative">
                     <select

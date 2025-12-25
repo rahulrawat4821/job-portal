@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const filterData = [
   {
@@ -20,19 +20,29 @@ const filterData = [
   },
 ];
 
-const FilterCard = () => {
-  const [selectedFilters, setSelectedFilters] = useState({});
-
+const FilterCard = ({ selectedFilters, setSelectedFilters }) => {
   const handleChange = (type, value) => {
-    setSelectedFilters({
-      ...selectedFilters,
+    setSelectedFilters(prev => ({
+      ...prev,
       [type]: value,
-    });
+    }));
+  };
+
+  const clearFilters = () => {
+    setSelectedFilters({});
   };
 
   return (
     <div className="w-full bg-white shadow-lg p-5 rounded-xl border">
-      <h2 className="text-lg font-semibold pb-2 mb-4 border-b">Filters</h2>
+      <div className="flex justify-between items-center mb-4 border-b pb-2">
+        <h2 className="text-lg font-semibold">Filters</h2>
+        <button
+          onClick={clearFilters}
+          className="text-sm text-purple-600 hover:underline"
+        >
+          Clear
+        </button>
+      </div>
 
       {filterData.map((section, index) => (
         <div key={index} className="mb-5">
@@ -46,12 +56,13 @@ const FilterCard = () => {
                 <input
                   type="radio"
                   name={section.filterType}
-                  value={item}
                   checked={selectedFilters[section.filterType] === item}
-                  onChange={() => handleChange(section.filterType, item)}
-                  className="accent-purple-600 w-4 h-4 cursor-pointer"
+                  onChange={() =>
+                    handleChange(section.filterType, item)
+                  }
+                  className="accent-purple-600 w-4 h-4"
                 />
-                <span className="text-sm text-gray-700">{item}</span>
+                <span className="text-sm">{item}</span>
               </label>
             ))}
           </div>
