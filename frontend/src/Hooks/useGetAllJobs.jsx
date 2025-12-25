@@ -1,21 +1,21 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { JOB_API_END_POINT } from "../utils/context";
 import { setAllJobs } from "../redux/jobSlice";
 
 const useGetAllJobs = () => {
   const dispatch = useDispatch();
+  const { searchedQuery } = useSelector((state) => state.job); // ✅ CORRECT
 
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
         const res = await axios.get(
-          `${JOB_API_END_POINT}/get`,
+          `${JOB_API_END_POINT}/get?keyword=${searchedQuery || ""}`,
           { withCredentials: true }
         );
 
-        // ✅ FIXED HERE
         if (res.data.success) {
           dispatch(setAllJobs(res.data.jobs));
         }
@@ -25,7 +25,7 @@ const useGetAllJobs = () => {
     };
 
     fetchAllJobs();
-  }, [dispatch]);
+  }, [dispatch, searchedQuery]); // ✅ dependency fixed
 };
 
 export default useGetAllJobs;

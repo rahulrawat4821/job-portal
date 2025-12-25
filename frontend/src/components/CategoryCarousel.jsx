@@ -2,6 +2,9 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { setSearchedQuery } from "../redux/jobSlice";
 
 const categories = [
   "Frontend Developer",
@@ -15,6 +18,13 @@ const categories = [
 ];
 
 const CategoryCarousel = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+      const searchJobHandler = (query) => {
+          dispatch(setSearchedQuery(query));
+          navigate('/browse');
+      } 
  const settings = {
     dots: true,
     infinite: true,
@@ -28,7 +38,7 @@ const CategoryCarousel = () => {
       <Slider {...settings}>
         {categories.map((cat, index) => (
           <div key={index} className="px-4">
-            <div className="bg-[#925def] text-white rounded-full py-4 px-6 text-center shadow-md hover:bg-[#5529a3] transition cursor-pointer">
+            <div onClick={() => searchJobHandler(cat)} className="bg-[#925def] text-white rounded-full py-4 px-6 text-center shadow-md hover:bg-[#5529a3] transition cursor-pointer">
               {cat}
             </div>
           </div>

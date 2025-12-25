@@ -39,25 +39,28 @@ export const applyJob = async (req, res) => {
 // Get jobs applied by user
 export const getAppliedJob = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.id; // ✅ CORRECT
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
     const applications = await Application.find({
       applicant: userId,
     })
       .populate({
         path: "job",
-        populate: {
-          path: "company",
-        },
+        populate: { path: "company" },
       })
       .sort({ createdAt: -1 });
 
-    res.status(200).json(applications);
+    return res.status(200).json(applications);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to fetch applied jobs" });
+    console.error("getAppliedJob error:", error);
+    return res.status(500).json({ message: "Failed to fetch applied jobs" });
   }
 };
+
 
 
 
