@@ -7,7 +7,8 @@ import { toast } from "sonner";
 
 const AdminJobsCreate = () => {
   const { companies } = useSelector((store) => store.company);
-  const [loading, setLoading] = useState(true); // ✅ loading state
+  const [loading, setLoading] = useState(true);
+
   const [jobData, setJobData] = useState({
     title: "",
     description: "",
@@ -20,14 +21,10 @@ const AdminJobsCreate = () => {
     companyId: "",
   });
 
-  // fetch companies on mount
   useGetAllCompanies();
 
-  // watch for companies to finish loading
   useEffect(() => {
-    if (companies) {
-      setLoading(false);
-    }
+    if (companies) setLoading(false);
   }, [companies]);
 
   const changeHandler = (e) => {
@@ -47,7 +44,9 @@ const AdminJobsCreate = () => {
         {
           title: jobData.title,
           description: jobData.description,
-          requirements: jobData.skills.split(",").map((s) => s.trim()),
+          requirements: jobData.skills
+            .split(",")
+            .map((skill) => skill.trim()), 
           experience: Number(jobData.experience),
           salary: Number(jobData.salary),
           location: jobData.location,
@@ -87,10 +86,26 @@ const AdminJobsCreate = () => {
       <form onSubmit={submitHandler} className="grid grid-cols-2 gap-6">
         <input name="title" value={jobData.title} onChange={changeHandler} placeholder="Job Title" className="border p-3 rounded" />
         <input name="location" value={jobData.location} onChange={changeHandler} placeholder="Location" className="border p-3 rounded" />
-        <input name="skills" value={jobData.skills} onChange={changeHandler} placeholder="Skills (comma separated)" className="border p-3 rounded col-span-2" />
-        <textarea name="description" value={jobData.description} onChange={changeHandler} placeholder="Job Description" className="border p-3 rounded col-span-2" rows={4} />
+
+        <input
+          name="skills"
+          value={jobData.skills}
+          onChange={changeHandler}
+          placeholder="Skills (comma separated)"
+          className="border p-3 rounded col-span-2"
+        />
+
+        <textarea
+          name="description"
+          value={jobData.description}
+          onChange={changeHandler}
+          placeholder="Job Description"
+          className="border p-3 rounded col-span-2"
+          rows={4}
+        />
+
         <input name="experience" value={jobData.experience} onChange={changeHandler} placeholder="Experience (years)" className="border p-3 rounded" />
-        <input name="salary" value={jobData.salary} onChange={changeHandler} placeholder="Salary" className="border p-3 rounded" />
+        <input name="salary" value={jobData.salary} onChange={changeHandler} placeholder="Salary (LPA)" className="border p-3 rounded" />
 
         <select name="jobType" value={jobData.jobType} onChange={changeHandler} className="border p-3 rounded">
           <option value="">Select Job Type</option>
@@ -102,7 +117,13 @@ const AdminJobsCreate = () => {
 
         <input name="openings" value={jobData.openings} onChange={changeHandler} placeholder="Number of Openings" className="border p-3 rounded" />
 
-        <select name="companyId" value={jobData.companyId} onChange={changeHandler} className="border p-3 rounded col-span-2" required>
+        <select
+          name="companyId"
+          value={jobData.companyId}
+          onChange={changeHandler}
+          className="border p-3 rounded col-span-2"
+          required
+        >
           <option value="">Select Company</option>
           {companies?.map((company) => (
             <option key={company._id} value={company._id}>
@@ -120,3 +141,4 @@ const AdminJobsCreate = () => {
 };
 
 export default AdminJobsCreate;
+

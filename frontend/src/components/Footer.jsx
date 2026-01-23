@@ -1,62 +1,102 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#875ecd] text-gray-300 py-10 mt-10">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+    <footer className="bg-[#875ecd] text-gray-300 mt-10">
+      
+      {/* Top Section */}
+      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-center sm:text-left">
 
-        {/* Logo + Short Description */}
+        {/* Logo & Description */}
         <div>
-          <h2 className="text-2xl font-bold text-white">Job<span className="text-[#F83002]">Portal</span></h2>
-          <p className="text-sm mt-3">
+          <h2 className="text-2xl font-bold text-white">
+            Job<span className="text-[#F83002]">Portal</span>
+          </h2>
+          <p className="text-sm mt-3 leading-relaxed">
             Your gateway to your dream career.  
             Apply to jobs, hire talent, and grow faster.
           </p>
         </div>
 
-        {/* Links */}
+        {/* Quick Links */}
         <div>
-          <h3 className="text-lg font-semibold text-white mb-3">Quick Links</h3>
+          <h3 className="text-lg font-semibold text-white mb-3">
+            Quick Links
+          </h3>
+
           <ul className="space-y-2 text-sm">
-            <li className="hover:text-[#F83002] cursor-pointer">Home</li>
-            <li className="hover:text-[#F83002] cursor-pointer">Jobs</li>
-            <li className="hover:text-[#F83002] cursor-pointer">Companies</li>
-            <li className="hover:text-[#F83002] cursor-pointer">About Us</li>
+            <li>
+              <Link
+                to="/"
+                className="hover:text-[#F83002] transition duration-300 hover:underline underline-offset-4"
+              >
+                Home
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/jobs"
+                className="hover:text-[#F83002] transition duration-300 hover:underline underline-offset-4"
+              >
+                Jobs
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/browse"
+                className="hover:text-[#F83002] transition duration-300 hover:underline underline-offset-4"
+              >
+                Browse
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/profile"
+                className="hover:text-[#F83002] transition duration-300 hover:underline underline-offset-4"
+              >
+                About Us
+              </Link>
+            </li>
           </ul>
         </div>
 
-        {/* Candidate */}
-        <div>
-          <h3 className="text-lg font-semibold text-white mb-3">For Candidates</h3>
-          <ul className="space-y-2 text-sm">
-            <li className="hover:text-[#F83002] cursor-pointer">Browse Jobs</li>
-            <li className="hover:text-[#F83002] cursor-pointer">Upload Resume</li>
-            <li className="hover:text-[#F83002] cursor-pointer">Saved Jobs</li>
-            <li className="hover:text-[#F83002] cursor-pointer">Notifications</li>
-          </ul>
-        </div>
+        {/* Spacer (keeps layout clean on desktop) */}
+        <div className="hidden md:block"></div>
 
-        {/* Contact */}
+        {/* Contact & Social */}
         <div>
-          <h3 className="text-lg font-semibold text-white mb-3">Contact Us</h3>
+          <h3 className="text-lg font-semibold text-white mb-3">
+            Contact Us
+          </h3>
+
           <ul className="space-y-2 text-sm">
-            <li className="hover:text-[#F83002] cursor-pointer">Email: support@jobportal.com</li>
-            <li className="hover:text-[#F83002] cursor-pointer">Phone: +91 98765 43210</li>
-            <li className="hover:text-[#F83002] cursor-pointer">Address: Bhopal, India</li>
+            <li className="hover:text-[#F83002] transition">
+              Email: rahulrawat@8458.com
+            </li>
+            <li className="hover:text-[#F83002] transition">
+              Phone: +91 84588 05335
+            </li>
+            <li className="hover:text-[#F83002] transition">
+              Address: Bhopal, India
+            </li>
           </ul>
 
-          {/* Social Links */}
-          <div className="flex space-x-4 mt-4">
-            <i className="ri-facebook-fill text-2xl hover:text-white cursor-pointer"></i>
-            <i className="ri-instagram-fill text-2xl hover:text-white cursor-pointer"></i>
-            <i className="ri-twitter-fill text-2xl hover:text-white cursor-pointer"></i>
-            <i className="ri-linkedin-fill text-2xl hover:text-white cursor-pointer"></i>
+          {/* Social Icons */}
+          <div className="flex justify-center sm:justify-start gap-5 mt-5">
+            <i className="ri-facebook-fill text-2xl hover:text-white hover:scale-110 transition cursor-pointer"></i>
+            <i className="ri-instagram-fill text-2xl hover:text-white hover:scale-110 transition cursor-pointer"></i>
+            <i className="ri-twitter-fill text-2xl hover:text-white hover:scale-110 transition cursor-pointer"></i>
+            <i className="ri-linkedin-fill text-2xl hover:text-white hover:scale-110 transition cursor-pointer"></i>
           </div>
         </div>
       </div>
 
-      {/* Bottom section */}
-      <div className="text-center text-sm text-gray-800 mt-10 border-t border-gray-700 pt-4">
+      {/* Bottom Section */}
+      <div className="text-center text-sm text-gray-200 border-t border-white/20 py-4 px-4">
         © {new Date().getFullYear()} JobPortal — All Rights Reserved.
       </div>
     </footer>

@@ -22,7 +22,7 @@ const filterData = [
 
 const FilterCard = ({ selectedFilters, setSelectedFilters }) => {
   const handleChange = (type, value) => {
-    setSelectedFilters(prev => ({
+    setSelectedFilters((prev) => ({
       ...prev,
       [type]: value,
     }));
@@ -52,7 +52,10 @@ const FilterCard = ({ selectedFilters, setSelectedFilters }) => {
 
           <div className="flex flex-col gap-2">
             {section.array.map((item, idx) => (
-              <label key={idx} className="flex items-center gap-2 cursor-pointer">
+              <label
+                key={idx}
+                className="flex items-center gap-2 cursor-pointer"
+              >
                 <input
                   type="radio"
                   name={section.filterType}
@@ -73,3 +76,4 @@ const FilterCard = ({ selectedFilters, setSelectedFilters }) => {
 };
 
 export default FilterCard;
+

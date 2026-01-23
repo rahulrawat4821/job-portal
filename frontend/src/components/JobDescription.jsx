@@ -10,12 +10,11 @@ const JobDescription = () => {
   const { id: jobId } = useParams();
   const dispatch = useDispatch();
 
-  const { singleJob } = useSelector(store => store.job);
-  const { user } = useSelector(store => store.auth);
+  const { singleJob } = useSelector((store) => store.job);
+  const { user } = useSelector((store) => store.auth);
 
   const [isApplied, setIsApplied] = useState(false);
 
-  // ✅ APPLY FOR JOB (POST)
   const applyForJob = async () => {
     try {
       const res = await axios.post(
@@ -26,27 +25,22 @@ const JobDescription = () => {
 
       if (res.data.success) {
         setIsApplied(true);
-
-        // update redux state instantly
         dispatch(
           setSingleJob({
             ...singleJob,
             applications: [
               ...(singleJob?.applications || []),
-              { applicant: user?._id }
-            ]
+              { applicant: user?._id },
+            ],
           })
         );
-
         toast.success(res.data.message);
       }
     } catch (error) {
-      console.log("Apply job error:", error);
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
-  // ✅ FETCH SINGLE JOB
   useEffect(() => {
     const fetchSingleJob = async () => {
       try {
@@ -59,14 +53,13 @@ const JobDescription = () => {
           dispatch(setSingleJob(res.data.job));
 
           const applied = res.data.job.applications?.some(
-            app => app.applicant?._id === user?._id
+            (app) => app.applicant?._id === user?._id
           );
 
           setIsApplied(applied);
-
         }
       } catch (error) {
-        console.log("Job fetch error:", error);
+        console.log(error);
       }
     };
 
@@ -76,31 +69,31 @@ const JobDescription = () => {
   return (
     <div className="max-w-7xl mx-auto my-10 px-4">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{singleJob?.title}</h1>
 
           <div className="flex flex-wrap gap-2 mt-3">
-            <span className="text-blue-700 bg-blue-100 px-3 py-1 rounded-full text-sm font-medium">
+            <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
               {singleJob?.position} Positions
             </span>
-            <span className="text-red-600 bg-red-100 px-3 py-1 rounded-full text-sm font-medium">
+            <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm">
               {singleJob?.jobType}
             </span>
-            <span className="text-purple-700 bg-purple-100 px-3 py-1 rounded-full text-sm font-medium">
+            <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">
               {singleJob?.salary} LPA
             </span>
           </div>
         </div>
 
-        {/* Apply Button */}
         <button
           onClick={applyForJob}
           disabled={isApplied}
-          className={`px-6 py-2 rounded-lg font-semibold text-white ${isApplied
+          className={`px-6 py-2 rounded-lg text-white font-semibold ${
+            isApplied
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-gradient-to-r from-purple-500 to-indigo-500 hover:opacity-90"
-            }`}
+              : "bg-gradient-to-r from-purple-500 to-indigo-500"
+          }`}
         >
           {isApplied ? "Already Applied" : "Apply Now"}
         </button>
@@ -108,20 +101,35 @@ const JobDescription = () => {
 
       <hr className="my-6" />
 
-      {/* Job Description */}
+      {/* Description */}
       <h2 className="text-lg font-semibold mb-4">Job Description</h2>
 
       <div className="space-y-3 text-gray-700">
         <p><b>Role:</b> {singleJob?.title}</p>
         <p><b>Location:</b> {singleJob?.location}</p>
         <p><b>Description:</b> {singleJob?.description}</p>
-        <p><b>Experience:</b> {singleJob?.experience} yrs</p>
+        <p><b>Experience:</b> {singleJob?.experience} years</p>
         <p><b>Salary:</b> {singleJob?.salary} LPA</p>
         <p><b>Total Applicants:</b> {singleJob?.applications?.length || 0}</p>
-        <p><b>Posted Date:</b> {singleJob?.createdAt && new Date(singleJob.createdAt).toLocaleDateString()}</p>
+      </div>
+
+      {/* Skills */}
+      <div className="mt-6">
+        <h3 className="font-semibold mb-2">Skills Required</h3>
+        <div className="flex flex-wrap gap-2">
+          {singleJob?.requirements?.map((skill, index) => (
+            <span
+              key={index}
+              className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm"
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
 export default JobDescription;
+

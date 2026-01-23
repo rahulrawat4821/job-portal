@@ -1,14 +1,15 @@
+
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { USER_API_END_POINT } from "../../../utils/context";
-import { toast } from 'sonner';
+import { toast } from "sonner";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../../redux/authSlice";
 
 const SignUp = () => {
-    const {loading} = useSelector(store=> store.auth);
-    const dispatch = useDispatch();
+  const { loading } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
 
   const [input, setInput] = useState({
     fullname: "",
@@ -16,30 +17,31 @@ const SignUp = () => {
     phoneNumber: "",
     password: "",
     role: "",
-    file: ""
+    file: "",
   });
 
   const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
-  }
+  };
+
   const changeFileHandler = (e) => {
     setInput({ ...input, file: e.target.files?.[0] });
-  }
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-
-    formData.append("fullname", input.fullname); 
-    formData.append("email", input.email); 
-    formData.append("phoneNumber", input.phoneNumber); 
+    formData.append("fullname", input.fullname);
+    formData.append("email", input.email);
+    formData.append("phoneNumber", input.phoneNumber);
     formData.append("password", input.password);
-     formData.append("role", input.role); 
-     if (input.file) { 
-      formData.append("file", input.file); }
+    formData.append("role", input.role);
+    if (input.file) {
+      formData.append("file", input.file);
+    }
 
     try {
       dispatch(setLoading(true));
@@ -49,24 +51,23 @@ const SignUp = () => {
         { withCredentials: true }
       );
       if (res.data.success) {
-        navigate("/login")
+        navigate("/login");
         toast.success("Registration Successful!");
-
       }
     } catch (error) {
-      console.error(error);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
-          dispatch(setLoading(false));
-        }
+      dispatch(setLoading(false));
+    }
   };
 
-
   return (
-    <div className="w-full flex justify-center mt-10 px-4">
-      <form onSubmit={submitHandler} className="w-full max-w-3xl p-8 border border-gray-400 rounded-xl shadow-sm">
-
-        <h1 className="text-2xl font-bold mb-6">Sign Up</h1>
+    <div className="w-full flex justify-center mt-6 sm:mt-10 px-4">
+      <form
+        onSubmit={submitHandler}
+        className="w-full max-w-3xl p-4 sm:p-6 md:p-8 border border-gray-400 rounded-xl shadow-sm"
+      >
+        <h1 className="text-xl sm:text-2xl font-bold mb-6">Sign Up</h1>
 
         {/* Full Name */}
         <div className="mb-4">
@@ -89,7 +90,7 @@ const SignUp = () => {
             value={input.email}
             name="email"
             onChange={changeEventHandler}
-            placeholder="Enter your email.."
+            placeholder="Enter your email"
             className="w-full border border-gray-400 p-3 rounded-lg"
           />
         </div>
@@ -102,7 +103,7 @@ const SignUp = () => {
             name="phoneNumber"
             value={input.phoneNumber}
             onChange={changeEventHandler}
-            placeholder="Enter your phoneNumber.."
+            placeholder="Enter your phone number"
             className="w-full border border-gray-400 p-3 rounded-lg"
           />
         </div>
@@ -115,22 +116,21 @@ const SignUp = () => {
             value={input.password}
             name="password"
             onChange={changeEventHandler}
-            placeholder="Enter password.."
+            placeholder="Enter password"
             className="w-full border border-gray-400 p-3 rounded-lg"
           />
         </div>
 
-        {/* Role + Profile Upload */}
-        <div className="flex items-center justify-between gap-4 mb-6">
-
-          {/* Student / Recruiter */}
-          <div className="flex items-center gap-4">
+        {/* Role + Profile */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          {/* Role */}
+          <div className="flex flex-wrap items-center gap-4">
             <label className="flex items-center gap-1">
               <input
                 type="radio"
                 name="role"
-                checked={input.role === "student"}
                 value="student"
+                checked={input.role === "student"}
                 onChange={changeEventHandler}
               />
               Student
@@ -140,8 +140,8 @@ const SignUp = () => {
               <input
                 type="radio"
                 name="role"
-                checked={input.role === "recruiter"}
                 value="recruiter"
+                checked={input.role === "recruiter"}
                 onChange={changeEventHandler}
               />
               Recruiter
@@ -149,28 +149,36 @@ const SignUp = () => {
           </div>
 
           {/* Profile Upload */}
-          <div>
-            <label className="font-medium mr-2">Profile</label>
-            <input type="file"
+          <div className="w-full sm:w-auto">
+            <label className="font-medium mr-2 block sm:inline">
+              Profile
+            </label>
+            <input
+              type="file"
               onChange={changeFileHandler}
-              className="border border-gray-400 p-1 rounded-md" />
-
+              className="border border-gray-400 p-1 rounded-md w-full sm:w-auto"
+            />
           </div>
         </div>
-         
-        { loading ?
-        <button className="w-full bg-[#0F172A] text-white p-3 rounded-lg text-lg font-medium cursor-none">
-          Please wait..
-        </button> 
-        : <button className="w-full bg-[#0F172A] text-white p-3 rounded-lg text-lg font-medium cursor-pointer">
-          SignUp
-        </button> 
-        }
+
+        {/* Button */}
+        {loading ? (
+          <button
+            disabled
+            className="w-full bg-[#0F172A] text-white p-3 rounded-lg text-lg font-medium cursor-not-allowed"
+          >
+            Please wait...
+          </button>
+        ) : (
+          <button className="w-full bg-[#0F172A] text-white p-3 rounded-lg text-lg font-medium">
+            Sign Up
+          </button>
+        )}
 
         {/* Login Redirect */}
         <p className="text-sm text-gray-600 mt-4">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-700">
+          <Link to="/login" className="text-blue-700 font-medium">
             Login
           </Link>
         </p>

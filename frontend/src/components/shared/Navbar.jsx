@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { CiUser } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
+import { HiOutlineMenu, HiX } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -9,17 +10,16 @@ import { USER_API_END_POINT } from "../../utils/context";
 import { setUser } from "../../redux/authSlice";
 
 const Navbar = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // profile dropdown
+  const [mobileMenu, setMobileMenu] = useState(false); // mobile menu
   const menuRef = useRef(null);
 
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // ✅ SAFE PROFILE PHOTO
   const profilePhoto = user?.profile?.profilePhoto || null;
 
-  // ✅ LOGOUT
   const logoutHandler = async () => {
     try {
       const res = await axios.get(`${USER_API_END_POINT}/logout`, {
@@ -32,64 +32,83 @@ const Navbar = () => {
         toast.success(res.data.message);
       }
     } catch (error) {
-      console.log(error);
       toast.error("Logout failed");
     }
   };
 
-  // ✅ CLOSE DROPDOWN ON OUTSIDE CLICK
+  // close profile dropdown on outside click
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setOpen(false);
       }
     };
-
     document.addEventListener("click", handler);
     return () => document.removeEventListener("click", handler);
   }, []);
 
+  const NavLinks = () => (
+    <>
+      {user && user.role === "recruiter" ? (
+        <>
+          <Link to="/admin/companies" onClick={() => setMobileMenu(false)}>
+            Companies
+          </Link>
+          <Link to="/admin/jobs" onClick={() => setMobileMenu(false)}>
+            Jobs
+          </Link>
+        </>
+      ) : (
+        <>
+          <Link to="/" onClick={() => setMobileMenu(false)}>
+            Home
+          </Link>
+          <Link to="/jobs" onClick={() => setMobileMenu(false)}>
+            Jobs
+          </Link>
+          <Link to="/browse" onClick={() => setMobileMenu(false)}>
+            Browse
+          </Link>
+        </>
+      )}
+    </>
+  );
+
   return (
-    <div className="shadow-sm">
+    <div className="shadow-sm relative">
       <div className="flex items-center justify-between max-w-7xl mx-auto h-16 px-4">
         {/* Logo */}
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl sm:text-2xl font-bold">
           Job<span className="text-[#F83002]">Portal</span>
         </h1>
 
-        {/* Nav Items */}
-        <div className="flex items-center gap-6 relative">
-          <ul className="flex items-center font-medium gap-5">
-  {user && user.role === "recruiter" ? (
-    <>
-      <li>
-        <Link to="/admin/companies">Companies</Link>
-      </li>
-      <li>
-        <Link to="/admin/jobs">Jobs</Link>
-      </li>
-    </>
-  ) : (
-    <>
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/jobs">Jobs</Link></li>
-      <li><Link to="/browse">Browse</Link></li>
-    </>
-  )}
-</ul>
+        {/* Desktop Nav */}
+        <ul className="hidden md:flex items-center font-medium gap-6">
+          <NavLinks />
+        </ul>
 
-          {/* AUTH SECTION */}
+        {/* Right Section */}
+        <div className="flex items-center gap-4">
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-2xl"
+            onClick={() => setMobileMenu(!mobileMenu)}
+          >
+            {mobileMenu ? <HiX /> : <HiOutlineMenu />}
+          </button>
+
+          {/* Auth Section (Desktop) */}
           {!user ? (
-            <div className="flex items-center gap-3 font-medium">
+            <div className="hidden sm:flex items-center gap-3 font-medium">
               <Link to="/login">Login</Link>
               <Link to="/signup">
-                <button className="bg-[#6A38C2] hover:bg-[#5f2db4] text-white px-4 py-2 rounded-xl">
+                <button className="bg-[#6A38C2] text-white px-4 py-2 rounded-xl">
                   SignUp
                 </button>
               </Link>
             </div>
           ) : (
-            <div ref={menuRef} className="relative">
+            <div ref={menuRef} className="relative hidden md:block">
               {/* Avatar */}
               {profilePhoto ? (
                 <img
@@ -107,10 +126,9 @@ const Navbar = () => {
                 </div>
               )}
 
-              {/* Dropdown */}
+              {/* Profile Dropdown */}
               {open && (
-                <div className="absolute right-0 mt-3 w-64 bg-white shadow-xl rounded-xl p-4 z-50">
-                  {/* User Info */}
+                <div className="absolute right-0 mt-3 w-60 bg-white shadow-xl rounded-xl p-4 z-50">
                   <div className="flex gap-3 items-center border-b pb-3">
                     {profilePhoto ? (
                       <img
@@ -125,29 +143,25 @@ const Navbar = () => {
                     )}
 
                     <div>
-                      <h3 className="font-semibold text-lg">{user?.fullname}</h3>
+                      <h3 className="font-semibold">{user?.fullname}</h3>
                       <p className="text-sm text-gray-500">{user?.email}</p>
                     </div>
                   </div>
 
-                  {/* Actions */}
                   <div className="pt-3">
-                    {
-                      user && user.role === "student" && (
-                          <Link
-                      to="/profile"
-                      className="flex items-center gap-3 w-full py-2 px-2 hover:bg-gray-100 rounded-lg text-gray-700"
-                    >
-                      <CiUser className="text-xl" />
-                      View Profile
-                    </Link>
-                      )
-                    }
-                   
+                    {user?.role === "student" && (
+                      <Link
+                        to="/profile"
+                        className="flex items-center gap-3 py-2 hover:bg-gray-100 rounded-lg"
+                      >
+                        <CiUser className="text-xl" />
+                        View Profile
+                      </Link>
+                    )}
 
                     <button
                       onClick={logoutHandler}
-                      className="flex items-center gap-3 w-full py-2 px-2 hover:bg-gray-100 rounded-lg text-red-500"
+                      className="flex items-center gap-3 py-2 text-red-500 hover:bg-gray-100 rounded-lg w-full"
                     >
                       <IoIosLogOut className="text-xl" />
                       Logout
@@ -159,6 +173,34 @@ const Navbar = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenu && (
+        <div className="md:hidden absolute top-16 left-0 w-full bg-white shadow-lg z-40">
+          <div className="flex flex-col gap-4 p-5 font-medium">
+            <NavLinks />
+
+            {!user ? (
+              <>
+                <Link to="/login">Login</Link>
+                <Link to="/signup">SignUp</Link>
+              </>
+            ) : (
+              <>
+                {user?.role === "student" && (
+                  <Link to="/profile">Profile</Link>
+                )}
+                <button
+                  onClick={logoutHandler}
+                  className="text-left text-red-500"
+                >
+                  Logout
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

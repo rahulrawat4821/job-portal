@@ -15,9 +15,9 @@ const LatestJobCard = ({job}) => {
       <p className="text-sm text-gray-600">{job?.description}</p>
      </div>
      <div className="flex items-center gap-2 mt-4">
-      <h3 className="text-blue-700">{job?.position}</h3>
-      <h3 className="text-[#F83002]">{job?.jobType}</h3>
-      <h3 className="text-[#7209b7]">{job?.salary}</h3>
+      <h3 className="text-blue-700 bg-blue-100 px-3 py-1 rounded-full text-xs font-semibold">{job?.position} Positions</h3>
+      <h3 className="text-red-600 bg-red-100 px-3 py-1 rounded-full text-xs font-semibold">{job?.jobType}</h3>
+      <h3 className="text-purple-700 bg-purple-100 px-3 py-1 rounded-full text-xs font-semibold">{job?.salary} LPA</h3>
      </div>
     
     </div>

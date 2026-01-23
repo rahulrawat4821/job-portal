@@ -14,12 +14,13 @@ const Job = ({ job }) => {
         w-full
       "
     >
-      {/* Top Section */}
+      {/* Top */}
       <div className="flex justify-between items-start">
         <p className="text-gray-500 text-xs sm:text-sm">
           {job?.createdAt
             ? `${Math.floor(
-                (Date.now() - new Date(job.createdAt)) / (1000 * 60 * 60 * 24)
+                (Date.now() - new Date(job.createdAt)) /
+                  (1000 * 60 * 60 * 24)
               )} days ago`
             : "Recently"}
         </p>
@@ -29,7 +30,7 @@ const Job = ({ job }) => {
         </button>
       </div>
 
-      {/* Company Info */}
+      {/* Company */}
       <div className="flex items-center gap-3 mt-3">
         <img
           src={job?.company?.logo || "/company.png"}
@@ -57,9 +58,9 @@ const Job = ({ job }) => {
       </p>
 
       {/* Tags */}
-      <div className="flex flex-wrap items-center gap-2 mt-4">
+      <div className="flex flex-wrap gap-2 mt-4">
         <span className="text-blue-700 bg-blue-100 px-3 py-1 rounded-full text-xs font-semibold">
-          {job?.positions} Positions
+          {job?.position} Positions
         </span>
         <span className="text-red-600 bg-red-100 px-3 py-1 rounded-full text-xs font-semibold">
           {job?.jobType}
@@ -70,7 +71,7 @@ const Job = ({ job }) => {
       </div>
 
       {/* Buttons */}
-      <div className="flex items-center gap-3 mt-5">
+      <div className="flex flex-wrap items-center gap-3 mt-5">
         <button
           className="border px-4 sm:px-5 py-1.5 text-sm rounded-lg hover:bg-gray-100 transition font-medium"
           onClick={() => navigate(`/description/${job?._id}`)}
@@ -91,3 +92,4 @@ const Job = ({ job }) => {
 };
 
 export default Job;
+
