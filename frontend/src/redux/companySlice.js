@@ -1,12 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { set } from "mongoose";
 
 const companySlice = createSlice({
   name: "company",
   initialState: {
     singleCompany: null,
     companies: [],
-    serachCompanyText:"",
+    serachCompanyText: "",
   },
   reducers: {
     setSingleCompany: (state, action) => {
@@ -15,11 +14,16 @@ const companySlice = createSlice({
     setAllCompanies: (state, action) => {
       state.companies = action.payload;
     },
-    setSearchCompanyText:(state,action)=>{
-      state.serachCompanyText=action.payload;
+    setSearchCompanyText: (state, action) => {
+      state.serachCompanyText = action.payload;
     },
   },
 });
 
-export const { setSingleCompany, setAllCompanies, setSearchCompanyText } = companySlice.actions;
+export const {
+  setSingleCompany,
+  setAllCompanies,
+  setSearchCompanyText,
+} = companySlice.actions;
+
 export default companySlice.reducer;
