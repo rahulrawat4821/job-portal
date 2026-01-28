@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
+
 
 const AdminJobsTable = () => {
   const navigate = useNavigate();
@@ -40,12 +41,6 @@ const AdminJobsTable = () => {
                 <td className="py-4 px-4">{job.experience || 0} yrs</td>
                 <td className="py-4 px-4">{job.salary || 0} LPA</td>
                 <td className="py-4 px-4 flex justify-end gap-3">
-                  <button
-                    onClick={() => navigate(`/admin/jobs/${job._id}`)}
-                    className="px-3 py-1 text-sm font-medium text-blue-600 border border-blue-500 rounded-full hover:bg-blue-500 hover:text-white transition"
-                  >
-                    Edit Job
-                  </button>
 
                   <button
                     onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)}

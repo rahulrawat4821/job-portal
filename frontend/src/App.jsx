@@ -13,6 +13,7 @@ import CompanySetup from "./components/admin/CompanySetup";
 import AdminJobs from "./components/admin/AdminJobs"
 import AdminJobsCreate from "./components/admin/AdminJobsCreate";
 import AdminJobApplicants from "./components/admin/AdminJobApplicants";
+
 export default function App() {
   return (
     <Routes>

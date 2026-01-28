@@ -28,8 +28,8 @@ const HeroSection = () => {
         </h1>
 
         <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-          Tenetur, error corrupti perspiciatis nulla illo in?
+           Your dream career is just one search away. 
+  Explore verified jobs, connect with recruiters, and build a future you love.
         </p>
 
         {/* 🔍 Responsive Search Box */}
