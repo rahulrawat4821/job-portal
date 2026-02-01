@@ -154,10 +154,17 @@ export const login = async (req, res) => {
 // Logout Controller
 export const logout = async (req, res) => {
     try {
-        return res.status(200).cookie("token", "", { maxAge: 0 }).json({
-            message: "Logged out successfully",
-            success: true,
-        });
+        return res.status(200).cookie("token", "", {
+    maxAge: 0,
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  })
+  .json({
+    message: "Logged out successfully",
+    success: true,
+  });
+
     } catch (error) {
         console.error("Logout Error:", error);
         return res.status(500).json({
