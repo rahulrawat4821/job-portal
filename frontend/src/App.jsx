@@ -33,7 +33,8 @@ export default function App() {
         <Route path="/description/:id" element={<JobDescription/>} />
 
 
-        // admin Routes
+        {/* Admin Routes */}
+
         <Route path="/admin/companies" element={<Companies />} />
         <Route path="/admin/companies/create" element={<CompanyCreate />} />
         <Route path="/admin/companies/:id" element={<CompanySetup/>} />
