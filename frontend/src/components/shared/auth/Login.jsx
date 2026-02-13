@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
@@ -10,6 +11,11 @@ const Login = () => {
   const { loading } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+  console.log("Component mounted. Loading is:", loading);
+}, []);
+
 
   const [input, setInput] = useState({
     email: "",

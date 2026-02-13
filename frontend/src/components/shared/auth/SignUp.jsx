@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { USER_API_END_POINT } from "../../../utils/context";
 import { toast } from "sonner";
@@ -10,7 +11,12 @@ import { setLoading } from "../../../redux/authSlice";
 const SignUp = () => {
   const { loading } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
+  
+  useEffect(() => {
+  console.log("Component mounted. Loading is:", loading);
+}, []);
 
+   
   const [input, setInput] = useState({
     fullname: "",
     email: "",
@@ -71,6 +77,7 @@ const SignUp = () => {
 
         {/* Full Name */}
         <div className="mb-4">
+          
           <label className="block font-medium mb-1">Full Name</label>
           <input
             type="text"

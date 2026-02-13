@@ -20,19 +20,17 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // !origin allows tools like Postman or local scouts to work
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.log("Blocked by CORS:", origin); // This will show in Render logs
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  origin:[
+    "http://localhost:5173",
+    "https://job-portal-gj9j.netlify.app"
+  ],
+  credentials: true
 }));
+
+
+
+
+
 
 // 2. OTHER MIDDLEWARES
 app.use(express.json());
