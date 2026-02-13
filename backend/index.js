@@ -13,12 +13,16 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 1. CORS FIRST (Always before other middlewares and routes)
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.FRONTEND_URL,
-  "https://job-portal-mu-sepia.vercel.app"
-];
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://job-portal-mu-sepia.vercel.app"
+    ],
+    credentials: true,
+  })
+);
+
 
 
 app.use(cors({
