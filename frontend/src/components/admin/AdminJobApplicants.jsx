@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
+import { APPLICATION_API_END_POINT } from "../../utils/context";
 
 const AdminJobApplicants = () => {
   const { jobId } = useParams();
@@ -12,7 +13,7 @@ const AdminJobApplicants = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:5000/api/v1/application/${jobId}/applicants`,
+        `${APPLICATION_API_END_POINT}/${jobId}/applicants`,
         { withCredentials: true }
       );
 
@@ -37,7 +38,7 @@ const AdminJobApplicants = () => {
   const handleStatusUpdate = async (appId, status) => {
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/v1/application/status/${appId}/update`,
+        `${APPLICATION_API_END_POINT}/status/${appId}/update`,
         { status },
         { withCredentials: true }
       );
