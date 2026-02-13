@@ -13,40 +13,39 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Allowed origins
+// 1. CORS FIRST (Always before other middlewares and routes)
 const allowedOrigins = [
   "http://localhost:5173",
   "https://job-portal-gj9j.netlify.app"
 ];
 
-// Middlewares
-app.use(cookieParser());
+app.use(cors({
+  origin: function (origin, callback) {
+    // !origin allows tools like Postman or local scouts to work
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log("Blocked by CORS:", origin); // This will show in Render logs
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// 2. OTHER MIDDLEWARES
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// CORS middleware
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
-// Routes
+// 3. ROUTES
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 
-// Connect to DB and start server
+// 4. DB CONNECTION
 connectDB().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on PORT: ${PORT}`);

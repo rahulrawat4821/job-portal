@@ -1,19 +1,12 @@
-import express from "express";
-import { isAuthenticated } from "../middlewares/authmiddleware.js";
-import { getAdminJob, getAlljob, getJobById, postJob } from "../controllers/job.controller.js";
+    import express from 'express';
+    import { isAuthenticated } from '../middlewares/authmiddleware.js';
+    import { getAdminJob, getAlljob, getJobById, postJob } from '../controllers/job.controller.js';
 
-const router = express.Router();
+    const router = express.Router();
 
-// Admin creates a new job
-router.post("/post", isAuthenticated, postJob);
+    router.post("/post",isAuthenticated, postJob);
+    router.get("/get",isAuthenticated, getAlljob);
+    router.get("/getadminjobs",isAuthenticated, getAdminJob);
+    router.get("/get/:id",isAuthenticated, getJobById);
 
-// Public route for fetching jobs (no auth required)
-router.get("/get", getAlljob);
-
-// Admin jobs (requires authentication)
-router.get("/getadminjobs", isAuthenticated, getAdminJob);
-
-// Get job by ID (optional auth, but can keep protected)
-router.get("/get/:id", getJobById);
-
-export default router;
+    export default router;
