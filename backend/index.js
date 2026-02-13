@@ -13,29 +13,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ CORS CONFIG (DYNAMIC & PRODUCTION SAFE)
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.FRONTEND_URL, // from .env
-];
-
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: [
+      "http://localhost:5173",
+      "https://your-frontend-domain.onrender.com"
+    ],
     credentials: true,
   })
 );
-
-// Allow preflight
-app.options("*", cors());
 
 // MIDDLEWARES
 app.use(express.json());
