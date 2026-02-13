@@ -23,33 +23,6 @@ app.use(
   })
 );
 
-
-
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    // In production, we should explicitly check the origin
-    if (!origin) {
-      return callback(null, true);
-    }
-    
-    // For production, check if the origin is in the allowed list
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    
-    return callback(null, true);
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With'],
-  exposedHeaders: ['Content-Length', 'Content-Type'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-}));
-
-
 // 2. OTHER MIDDLEWARES
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
