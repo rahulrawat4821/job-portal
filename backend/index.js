@@ -16,9 +16,9 @@ const PORT = process.env.PORT || 3000;
 // 1. CORS FIRST (Always before other middlewares and routes)
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://job-portal-gj9j.netlify.app",
-  "https://job-portal-gj9j.onrender.com"
+  process.env.FRONTEND_URL
 ];
+
 
 app.use(cors({
   origin: (origin, callback) => {
