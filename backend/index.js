@@ -16,7 +16,8 @@ const PORT = process.env.PORT || 3000;
 // 1. CORS FIRST (Always before other middlewares and routes)
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.FRONTEND_URL
+  process.env.FRONTEND_URL,
+  "https://job-portal-mu-sepia.vercel.app"
 ];
 
 
